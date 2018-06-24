@@ -1,6 +1,18 @@
 $(document).ready(function(){
 	function scrollLeft(evt){
-		evt.preventNavigation();
+		evt.preventDefault();
+		evt.stopPropagation();
+		evt.stopImmediatePropagation();
+
+		if (position > 0) {
+			position = Math.max(0,position - 250);
+		}
+
+		$items.css({left: (-position) + "px"});
+	}
+
+	function scrollRight(evt){
+		evt.preventDefault();
 		evt.stopPropagation();
 		evt.stopImmediatePropagation();
 
@@ -26,5 +38,7 @@ $(document).ready(function(){
 	// attach click handlers for the `$left` and `$right` buttons,
 	// that call the `scrollLeft(..)` and `scrollRight(..)` functions,
 	// respectively
+	$left.click(scrollLeft);
+	$right.click(scrollRight);
 
 });

@@ -3,6 +3,24 @@ $(document).ready(function(){
 	var $items = $("[rel=js-carousel] > [rel=js-content] > [rel=js-items]");
 	var $content = $("[rel=js-details]");
 
+	function loadPerson(ID){
+		$.ajax("details/" + ID +".html",{datatype: "text"})
+		.then(function(content){
+			$content.html(content);
+		});
+	}
+
+	function personClicked(evt){
+		evt.preventDefault();
+		evt.stopPropagation();
+		evt.stopImmediatePropagation();
+
+		var ID = $(evt.target).attr("rel").replace(/^.*(\d+)$/,"$1");
+		loadPerson(ID);
+	}
+
+	$items.on("click","> [rel^=js-item-]",personClicked);
+
 	// on click of a carousel item, do an Ajax request for
 	// the "details/2.html" (or whatever) file for the person
 	// clicked, and load those contents into the `$content` div.
