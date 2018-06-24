@@ -1,4 +1,4 @@
-$(document).ready(function(){
+var Carousel  = (function(){
 	function scrollLeft(evt){
 		evt.preventDefault();
 		evt.stopPropagation();
@@ -23,22 +23,38 @@ $(document).ready(function(){
 		$items.css({left: (-position) + "px"});
 	}
 
+	function personClicked(evt){
+		evt.preventDefault();
+		evt.stopPropagation();
+		evt.stopImmediatePropagation();
 
-	var $content = $("[rel=js-carousel] > [rel=js-content]");
-	var $items = $content.children("[rel=js-items]");
-	var $left = $("[rel=js-carousel] > [rel=js-controls] > [rel=js-left]");
-	var $right = $("[rel=js-carousel] > [rel=js-controls] > [rel=js-right]");
+		var ID = $(evt.target).attr("rel").replace(/^.*(\d+)$/,"$1");
+		Details.loadPerson(ID);
+	}
+	function init(){
+		$content = $("[rel=js-carousel] > [rel=js-content]");
+		$items = $content.children("[rel=js-items]");
+	 	$left = $("[rel=js-carousel] > [rel=js-controls] > [rel=js-left]");
+		$right = $("[rel=js-carousel] > [rel=js-controls] > [rel=js-right]");
 
 
-	var contentWidth = $content.width();
-	var itemsWidth = $items.width();
-	var position = 0;
-	var maxPosition = (itemsWidth - contentWidth);
+		contentWidth = $content.width();
+		itemsWidth = $items.width();
+		position = 0;
+		maxPosition = (itemsWidth - contentWidth);
 
-	// attach click handlers for the `$left` and `$right` buttons,
-	// that call the `scrollLeft(..)` and `scrollRight(..)` functions,
-	// respectively
-	$left.click(scrollLeft);
-	$right.click(scrollRight);
+		$left.click(scrollLeft);
+		$right.click(scrollRight);
 
-});
+		$items.on("click","> [rel^=js-item-]",personClicked);
+	}
+
+	var $content, $items, $left, $right,
+		contentWidth, itemsWidth, position, maxPosition
+	;
+
+	return {
+		init : init
+	};
+
+})();
