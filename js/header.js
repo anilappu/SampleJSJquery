@@ -1,6 +1,9 @@
 var Header = (function(){
 
-	function clickHeaderLinkEvent(evt){
+	function clickHeaderLink(evt){
+		if ($modal.is(":visible")) {
+			return closeModal(evt);
+		}
 		evt.preventDefault();
 		evt.stopPropagation();
 		evt.stopImmediatePropagation();
@@ -13,16 +16,29 @@ var Header = (function(){
 		});
 	}
 
-	function init(){
-		$modal = $("[rel=js-modal]");
-		$("[rel=js-header]").on("click","> [rel^=js]",clickHeaderLinkEvent);
+	function closeModal(evt) {
+		evt.preventDefault();
+		evt.stopPropagation();
+		evt.stopImmediatePropagation();
+
+		$content.empty();
+		$modal.hide();
 	}
 
-	var $modal;
+	function init(){
+		$modal = $("[rel=js-modal]");
+		$close = $modal.children("[rel='js-close']");
+		$content = $modal.children("[rel='js-content']");
 
-	return{
-		init: init
-	};
+		$close.on("click",closeModal);
+		$("[rel=js-header]").on("click","> [rel^=js]",clickHeaderLink);
+	}
+
+	var $modal, $close, $content;
+
+	EVT.on("init",init);
+
+	return{};
 
 })();
 

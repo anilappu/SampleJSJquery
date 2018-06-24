@@ -29,7 +29,8 @@ var Carousel  = (function(){
 		evt.stopImmediatePropagation();
 
 		var ID = $(evt.target).attr("rel").replace(/^.*(\d+)$/,"$1");
-		Details.loadPerson(ID);
+		
+		EVT.emit("person-selected",ID);
 	}
 	function init(){
 		$content = $("[rel=js-carousel] > [rel=js-content]");
@@ -53,8 +54,7 @@ var Carousel  = (function(){
 		contentWidth, itemsWidth, position, maxPosition
 	;
 
-	return {
-		init : init
-	};
+	EVT.on("init",init);
+	return {};
 
 })();
